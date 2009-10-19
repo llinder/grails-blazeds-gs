@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	layout="absolute"
+	implements="mx.rpc.IResponder" creationComplete="creationCompleteHandler(event)">
+	<mx:RemoteObject id="service"
+		destination="testService" />
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.rpc.AsyncToken;
+			private function creationCompleteHandler(event:Event):void
+			{
+				service.setCredentials("demo", "demo");
+				var token:AsyncToken = service.echo("Ping!");
+				token.addResponder(this);
+			}
+			
+			public function result(result:Object):void
+			{
+				var r:ResultEvent = result as ResultEvent;
+				this.traceText.text += r.result;
+			}
+			
+			public function fault(fault:Object):void
+			{
+				var f:FaultEvent = fault as FaultEvent;
+				this.traceText.text += f.message;
+			}
+		]]>
+	</mx:Script>
+	<mx:TextArea x="10" y="10" width="452" height="385" id="traceText"/>
+	
+</mx:Application>

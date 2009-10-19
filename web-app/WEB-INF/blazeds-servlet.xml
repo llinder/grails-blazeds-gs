@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:flex="http://www.springframework.org/schema/flex"
+	xmlns:security="http://www.springframework.org/schema/security"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-2.0.4.xsd
+    http://www.springframework.org/schema/flex
+    http://www.springframework.org/schema/flex/spring-flex-1.0.xsd">
+
+	<alias name="authenticationManager" alias="_authenticationManager" />
+	<alias name="accessDecisionManager" alias="_accessDecisionManager" />
+
+	<!-- <security:global-method-security secured-annotations="enabled" jsr250-annotations="enabled"/> -->
+	
+	<!--
+	<security:global-method-security>
+		<security:protect-pointcut expression="execution(* *.echo(..))" access="ROLE_USER"/>
+	</security:global-method-security>
+	-->
+	
+    <flex:message-broker>
+        <flex:secured authentication-manager="authenticationManager" access-decision-manager="accessDecisionManager">
+			<flex:secured-endpoint-path pattern="**/messagebroker/**" access="ROLE_USER" />
+		</flex:secured>
+    </flex:message-broker>
+
+	<flex:remoting-destination ref="testService" 
+	    include-methods="echo" 
+	    exclude-methods="majicEyesOnly" 
+	    channels="amf, secure-amf" />
+     
+<!--
+	<flex:remoting-destination ref="testService"
+		channels="amf, secure-amf" /> -->
+	
+</beans>

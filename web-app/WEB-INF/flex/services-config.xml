@@ -1,0 +1,70 @@
+<services-config>
+    
+    <services>
+        
+        <default-channels>
+            <channel ref="amf" />
+        </default-channels>
+        
+    </services>
+	
+    <channels>
+        <channel-definition id="secure-amf"
+            class="mx.messaging.channels.SecureAMFChannel">
+            <endpoint
+                url="https://localhost:8080/grails-blazeds-gs/messagebroker/secure-amf"
+                class="flex.messaging.endpoints.SecureAMFEndpoint" />
+            <properties>
+                <polling-enabled>false</polling-enabled>
+                <add-no-cache-headers>false</add-no-cache-headers>
+            </properties>
+        </channel-definition>
+        
+        <channel-definition id="amf"
+            class="mx.messaging.channels.AMFChannel">
+            <endpoint
+                url="http://localhost:8080/grails-blazeds-gs/messagebroker/amf"
+                class="flex.messaging.endpoints.AMFEndpoint" />
+            <properties>
+                <polling-enabled>false</polling-enabled>
+                <add-no-cache-headers>false</add-no-cache-headers>
+            </properties>
+        </channel-definition>
+    </channels>
+    
+    <logging>
+        <target class="flex.messaging.log.ServletLogTarget" level="Error">
+            
+            <properties>
+                <prefix>[BlazeDS]</prefix>
+                <includeDate>true</includeDate>
+                <includeTime>true</includeTime>
+                <includeLevel>true</includeLevel>
+                <includeCategory>true</includeCategory>
+            </properties>
+            
+            <filters>
+                <pattern>Endpoint.*</pattern>
+                <pattern>Service.*</pattern>
+                <pattern>Message.*</pattern>
+                <pattern>DataService.*</pattern>
+                <pattern>Configuration</pattern>
+            </filters>
+            
+        </target>
+        
+    </logging>
+    
+    <system>
+        <redeploy>
+            <enabled>true</enabled>
+            <watch-interval>20</watch-interval>
+            <watch-file>
+                {context.root}/WEB-INF/flex/services-config.xml
+            </watch-file>
+            <touch-file>{context.root}/WEB-INF/web.xml
+            </touch-file>
+        </redeploy>
+    </system>
+    
+</services-config>
